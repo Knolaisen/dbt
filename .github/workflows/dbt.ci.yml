@@ -34,6 +34,25 @@ jobs:
 
       - name: Install dbt packages
         run: dbt deps
+        
+      - name: Create dbt profile
+        run: |
+            mkdir -p ~/.dbt
+            cat > ~/.dbt/profiles.yml <<'YAML'
+            default:
+                target: ci
+                outputs:
+                    ci:
+                        type: snowflake
+                        account: "{{ env_var('DBT_SNOWFLAKE_ACCOUNT') }}"
+                        user: "{{ env_var('DBT_SNOWFLAKE_USER') }}"
+                        password: "{{ env_var('DBT_SNOWFLAKE_PASSWORD') }}"
+                        role: "{{ env_var('DBT_SNOWFLAKE_ROLE') }}"
+                        database: "{{ env_var('DBT_SNOWFLAKE_DATABASE') }}"
+                        warehouse: "{{ env_var('DBT_SNOWFLAKE_WAREHOUSE') }}"
+                        schema: DBT_CI
+                        threads: 4
+            YAML
 
       - name: Check SQL formatting and style
         run: sqlfluff lint models
