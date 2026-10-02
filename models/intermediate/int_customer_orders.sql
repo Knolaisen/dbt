@@ -1,18 +1,9 @@
 with customers as (
-    select
-        c_custkey as customer_id,
-        c_name as first_name,
-        c_nationkey as last_name -- change columns as appropriate!
-    from {{ source('snowflake_sample_data', 'CUSTOMER') }}
+    select * from {{ ref('stg__customers') }}
 ),
 
 orders as (
-    select
-        o_orderkey as order_id,
-        o_custkey as customer_id,
-        o_orderdate as order_date,
-        o_orderstatus as status
-    from {{ source('snowflake_sample_data', 'ORDERS') }}
+    select * from {{ ref('stg__orders') }}
 ),
 
 customer_orders as (
