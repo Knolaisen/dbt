@@ -1,0 +1,15 @@
+# models/schema.yml
+version: 2
+
+models:
+  - name: stg__customers
+    columns:
+      - name: customer_id
+        data_tests:
+          - not_null
+          - unique
+      - name: phone_number
+        data_tests:
+          - valid_phone_number
+
+
